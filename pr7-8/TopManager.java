@@ -1,25 +1,21 @@
 public class TopManager implements EmployeePosition{
-    private double totalIncome;
-    public double baseSalary;
+    private final Company company;
 
-    public TopManager(double baseSalary) {
-        this.baseSalary = baseSalary;
+    public TopManager(Company company) {
+        this.company = company;
     }
 
-    public void setTotalIncome(double totalIncome) {
-        this.totalIncome = totalIncome;
-    }
-
+    @Override
     public String getJobTitle() {
         return "Top Manager";
     }
 
-    public void setIncome(double income) {
-        this.totalIncome = income;
-    }
-
+    @Override
     public double calcSalary(double baseSalary) {
-        if (totalIncome > 10000000) return (baseSalary * 1.5) + baseSalary;
-        else return baseSalary;
+        if(company.getCompanyIncome() > 10000000) {
+            return baseSalary + (baseSalary * 1.5);
+        } else {
+            return baseSalary;
+        }
     }
 }

@@ -1,20 +1,19 @@
+import java.util.Random;
 public class Manager implements EmployeePosition{
-public double baseSalary;
-public double totalIncome;
+    Random r = new Random();
+    private final double companyIncome = Math.random() * (115000 - 140000) + 115000;
 
-    public Manager(double baseSalary) {
-        this.baseSalary = baseSalary;
-    }
-
+    @Override
     public String getJobTitle() {
         return "Manager";
     }
 
-    public double calcSalary(double baseSalary) {
-        return (((int)(Math.random() * ((140000 - 115000) + 1)) + 115000) * 0.05) + baseSalary;
+    public double getCompanyIncome() {
+        return companyIncome;
     }
 
-    public void setIncome(double income) {
-        this.totalIncome = income;
+    @Override
+    public double calcSalary(double baseSalary) {
+        return baseSalary + (companyIncome * 0.05);
     }
 }

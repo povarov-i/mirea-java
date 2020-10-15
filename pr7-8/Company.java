@@ -1,23 +1,26 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Company {
     public ArrayList<Employee> employees = new ArrayList<Employee>();
-    public double income;
+    public double companyIncome;
 
-    public void hire(Employee employee) {
-        employees.add(employee);
-        employee.strPosition = employee.position.getJobTitle();
-        employee.salary = employee.position.calcSalary(employee.salary);
-        employee.position.setIncome(getIncome());
+    public double getCompanyIncome() {
+        return companyIncome;
     }
 
-    public void hireAll(ArrayList<Employee> hiringList) {
-        employees.addAll(hiringList);
-        for (Employee employee : employees) {
-            employee.strPosition = employee.position.getJobTitle();
-            employee.salary = employee.position.calcSalary(employee.salary);
-            employee.position.setIncome(getIncome());
+    public void setCompanyIncome(double companyIncome) {
+        this.companyIncome = companyIncome;
+    }
+
+    public void hire(Employee employee) {
+        employee.setFinalSalary(employee.position.calcSalary(employee.baseSalary));
+        employees.add(employee);
+    }
+
+    public void hireAll(ArrayList<Employee> newEmployees) {
+        employees.addAll(newEmployees);
+        for (Employee employee : newEmployees) {
+            employee.setFinalSalary(employee.position.calcSalary(employee.baseSalary));
         }
     }
 
@@ -25,47 +28,51 @@ public class Company {
         employees.remove(employee);
     }
 
-    public double getIncome() {
-        return income;
-    }
-
-    public void setIncome(double income) {
-        this.income = income;
-    }
-
-    public ArrayList<Employee> getTopSalaryStaff(int count) {
-        ArrayList<Employee> employeesList = employees;
-        int length = employeesList.size();
-        for(int i = 0; i < length - 1; i++) {
-            for (int j = 0; j < length - 1; j++) {
-                if (employeesList.get(j).position.calcSalary(employeesList.get(j).salary) < employeesList.get(j + 1).position.calcSalary(employeesList.get(j + 1).salary))
-                    Collections.swap(employeesList, j, j + 1);
+    public ArrayList<Employee> getTopStaff(int n) {
+        ArrayList<Employee> topStaff = employees;
+        int length = topStaff.size();
+        for (int i = 0; i < length - 1; i++) {
+            for (int j = 0; j < length - i - 1; j++) {
+                if (topStaff.get(j).getFinalSalary() < topStaff.get(j + 1).getFinalSalary()) {
+                    Employee temp = topStaff.get(j);
+                    topStaff.set(j, topStaff.get(j + 1));
+                    topStaff.set(j + 1, temp);
+                }
             }
         }
-        count = employeesList.size() - count;
-        for(int i = 0; i < count; i++) employeesList.remove(employeesList.get(employeesList.size() - 1));
-        return employeesList;
+        ArrayList<Employee> sortedTopStaff = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            sortedTopStaff.add(topStaff.get(i));
+        }
+        return sortedTopStaff;
     }
 
-    public ArrayList<Employee> getLowestSalaryStaff(int count) {
-        ArrayList<Employee> employeesList = employees;
-        int length = employeesList.size();
-        for(int i = 0; i < length - 1; i++) {
-            for (int j = 0; j < length - 1; j++) {
-                if (employeesList.get(j).position.calcSalary(employeesList.get(j).salary) > employeesList.get(j + 1).position.calcSalary(employeesList.get(j + 1).salary))
-                    Collections.swap(employeesList, j, j + 1);
+    public ArrayList<Employee> getLowestStaff(int n) {
+        ArrayList<Employee> lowestStaff = employees;
+        int length = lowestStaff.size();
+        for (int i = 0; i < length - 1; i++) {
+            for (int j = 0; j < length - i - 1; j++) {
+                if (lowestStaff.get(j).getFinalSalary() > lowestStaff.get(j + 1).getFinalSalary()) {
+                    Employee temp = lowestStaff.get(j);
+                    lowestStaff.set(j, lowestStaff.get(j + 1));
+                    lowestStaff.set(j + 1, temp);
+                }
             }
         }
-        count = employeesList.size() - count;
-        for(int i = 0; i < count; i++) employeesList.remove(employeesList.get(employeesList.size() - 1));
-        return employeesList;
+        ArrayList<Employee> sortedLowestStaff = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            sortedLowestStaff.add(lowestStaff.get(i));
+        }
+        return sortedLowestStaff;
     }
 
-    public ArrayList<String> listPrint(ArrayList<Employee> employees) {
-        ArrayList<String> strList = new ArrayList<String>();
-        for(Employee employee : employees) {
+    public void printList(ArrayList<Employee> employees) {
+        ArrayList<String> strList = new ArrayList<>();
+        for (Employee employee : employees) {
             strList.add(employee.toString());
         }
-        return strList;
+        for (String str : strList) {
+            System.out.println(str);
+        }
     }
 }
